@@ -15,8 +15,8 @@ def sum_per_cell(cellByGeneDf,exclude_blanks=False):
                 whether to include only real, non-blank genes when computing per cell sums
     """
     try:
-        assert (type(cellByGeneDf)==dd.core.DataFrame or type(cellByGeneDf)==pd.core.frame.DataFrame)
-        if type(cellByGeneDf)==dd.core.DataFrame:
+        assert (type(cellByGeneDf)==dd.dask_expr._collection.DataFrame or type(cellByGeneDf)==pd.core.frame.DataFrame)
+        if type(cellByGeneDf)==dd.dask_expr._collection.DataFrame:
             if cellByGeneDf.columns.dtype==int:
                 columns=cellByGeneDf.columns.astype('str')
             else:
@@ -29,7 +29,7 @@ def sum_per_cell(cellByGeneDf,exclude_blanks=False):
             if cellByGeneDf.columns.dtype==int:
                 columns=cellByGeneDf.columns.astype('str')
             else:
-                columns=cellByGeneDf.columns            
+                columns=cellByGeneDf.columns
             if exclude_blanks:
                 return cellByGeneDf.iloc[:,np.where(~columns.str.contains('Blank'))[0]].sum(axis=1)
             else:
@@ -46,8 +46,8 @@ def sum_per_trx(cellByGeneDf):
                 dask or pandas m x n dataframe (cell (m) by gene (n) )
     """
     try:
-        assert (type(cellByGeneDf)==dd.core.DataFrame or type(cellByGeneDf)==pd.core.frame.DataFrame)
-        if type(cellByGeneDf)==dd.core.DataFrame:
+        assert (type(cellByGeneDf)==dd.dask_expr._collection.DataFrame or type(cellByGeneDf)==pd.core.frame.DataFrame)
+        if type(cellByGeneDf)==dd.dask_expr._collection.DataFrame:
             return cellByGeneDf.sum(axis=0).compute()
         else:
             return cellByGeneDf.sum(axis=0)
